@@ -121,11 +121,13 @@ parts:
     stage:
       - bin/*
       - dockerd-patches/*
+      - compose-v2-patches/*
       - config/daemon.json
     prime:
       - -bin/prep-dockerd-build.sh
       - -bin/go-build-helper.sh
       - -dockerd-patches/*
+      - -compose-v2-patches/*
       - bin/*
       - config/daemon.json
 
@@ -292,6 +294,7 @@ parts:
     # https://github.com/docker/compose/releases
     source-commit: v2.5.0
     override-build: |
+      git apply "$SNAPCRAFT_STAGE"/compose-v2-patches/*.patch
       make -f builder.Makefile
 
       install -d "$SNAPCRAFT_PART_INSTALL/usr/libexec/docker/cli-plugins"
